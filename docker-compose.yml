@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    env_file:
+      - docker.env     
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+     - nestjs-network  
+volumes:
+  db_data:
+networks:
+  nestjs-network:  

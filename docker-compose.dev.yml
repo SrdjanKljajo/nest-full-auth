@@ -1,0 +1,18 @@
+version: "3.8"
+services: 
+  nest_api:  
+    image: nest_auth
+    restart: unless-stopped 
+    build:
+     dockerfile: Dockerfile
+     context: .
+     target: development
+    ports:
+      - 3333:3333
+    command: npm run start:migrate:dev
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+     - nestjs-network

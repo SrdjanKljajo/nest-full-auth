@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  AUTHOR
+  MODERATOR
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String?
+  age       Int?
+  country   String?
+  email     String   @unique
+  hash      String
+  role      UserRole @default(USER)
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Visibility {
+  VISIBLE
+  HIDDEN
+  FEATURED
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  title      String     @unique
+  content    String
+  userId     Int
+  likes      Int?
+  visibility Visibility @default(HIDDEN)
+  user       User       @relation(fields: [userId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("posts")
+}
